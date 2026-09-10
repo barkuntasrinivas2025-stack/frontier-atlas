@@ -1,0 +1,16 @@
+aiohttp
+beautifulsoup4
+lxml
+pydantic>=2
+pydantic-settings
+python-dateutil
+rapidfuzz
+sqlalchemy
+asyncpg
+psycopg[binary]
+gspread
+google-auth
+pytest
+pytest-asyncio
+reportlab
+pyarrow

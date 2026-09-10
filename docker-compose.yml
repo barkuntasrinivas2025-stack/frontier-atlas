@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: frontier-atlas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: frontier_atlas
+      POSTGRES_USER: frontier
+      POSTGRES_PASSWORD: frontier_dev_password
+    ports: ["55432:5432"]
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U frontier -d frontier_atlas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    container_name: frontier-atlas-redis
+    restart: unless-stopped
+    ports: ["6379:6379"]
+  app:
+    build: .
+    env_file: .env
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_started}
+    volumes:
+      - .:/app
+volumes:
+  postgres_data:
